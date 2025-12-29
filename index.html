@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vérification de sécurité</title>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #f6f7f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2937;
+}
+
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 24px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 28px;
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 16px;
+}
+
+.logo svg {
+    height: 28px;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+p {
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 20px;
+}
+
+.footer {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div class="card">
+
+        <div class="logo">
+            <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M41 28H15C7 28 3 23 3 18C3 13 7 9 13 9C15 4 20 1 26 1C34 1 40 7 40 15H41C46 15 50 19 50 23C50 26 47 28 44 28H41Z" fill="#F38020"/>
+                <text x="55" y="26" font-size="18" fill="#111827" font-family="Arial, Helvetica, sans-serif">Cloudflare</text>
+            </svg>
+        </div>
+
+        <h1>Vérification de sécurité</h1>
+        <p>Veuillez confirmer que vous êtes un humain pour continuer.</p>
+
+        <div class="cf-turnstile"
+             data-sitekey="VOTRE_SITE_KEY_ICI"
+             data-callback="onSuccess">
+        </div>
+
+        <div class="footer">
+            Performance &amp; sécurité par Cloudflare
+        </div>
+    </div>
+</div>
+
+<script>
+function onSuccess(token) {
+  fetch("/verify", {
+    method: "POST",
+    body: new URLSearchParams({
+      "cf-turnstile-response": token
+    })
+  }).then(res => {
+    if (res.ok) {
+      window.location.href = "/success.html";
+    } else {
+      alert("Échec de la vérification");
+    }
+  });
+}
+</script>
+</body>
+</html>
